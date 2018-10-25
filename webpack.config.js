@@ -1,8 +1,9 @@
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: './app/javascripts/app.js',
+  entry: './app/scripts/index.js',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'app.js'
@@ -10,17 +11,14 @@ module.exports = {
   plugins: [
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
-      { from: './app/index.html', to: "index.html" }
+      { from: './app/index.html', to: 'index.html' }
     ])
   ],
+  devtool: 'source-map',
   module: {
     rules: [
       {
-       test: /\.css$/,
-       use: [ 'style-loader', 'css-loader' ]
-      },
-      {
-        test: /\.(scss)$/,
+        test: /\.(s?css)$/,
         use: [{
           loader: 'style-loader', // inject CSS to page
         }, {
@@ -30,7 +28,7 @@ module.exports = {
           options: {
             plugins: function () { // post css plugins, can be exported to postcss.config.js
               return [
-                require('precss'),
+                //require('precss'),
                 require('autoprefixer')
               ];
             }
@@ -38,21 +36,18 @@ module.exports = {
         }, {
           loader: 'sass-loader' // compiles Sass to CSS
         }]
-      }          
-    ],
-    loaders: [
-      { test: /\.json$/, use: 'json-loader' },
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-          plugins: ['transform-runtime']
-        }
-      }
+      },
+      // { test: /\.s?css$/, use: [ 'style-loader', 'css-loader', 'sass-loader' ] },
+      // {
+      //   test: /\.js$/,
+      //   exclude: /(node_modules|bower_components)/,
+      //   loader: 'babel-loader',
+      //   query: {
+      //     presets: ['env'],
+      //     plugins: ['transform-react-jsx', 'transform-object-rest-spread', 'transform-runtime']
+      //   }
+      // }
     ]
   }
 }
-
 
